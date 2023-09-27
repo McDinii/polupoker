@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const ParticipantList = () => {
+const ParticipantList = ({ refreshParticipants }) => {
     const [participants, setParticipants] = useState([]);
 
+    const fetchParticipants = async () => {
+        try {
+            const response = await axios.get('/api/participants');
+            setParticipants(response.data);
+            refreshParticipants(); // вызываем функцию для обновления списка участников
+        } catch (error) {
+            console.error('Error fetching participants:', error);
+        }
+    };
+
     useEffect(() => {
-        // Fetch participant data from the server or any other data source
-        const fetchParticipants = async () => {
-            try {
-                const response = await fetch('/api/participants');
-                const data = await response.json();
-                setParticipants(data);
-            } catch (error) {
-                console.error('Error fetching participants:', error);
-            }
-        };
         fetchParticipants();
     }, []);
 

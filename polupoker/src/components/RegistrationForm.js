@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ refreshParticipants }) => {
     const [name, setName] = useState('');
     const [nickname, setNickname] = useState('');
     const [telegram, setTelegram] = useState('');
@@ -26,14 +27,30 @@ const RegistrationForm = () => {
         setIsPlayingMoney(event.target.checked);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (telegram && !/^(https?:\/\/)?(www\.)?(t\.me\/)[^\s/]+$/.test(telegram)) {
             setTelegramError('Invalid Telegram link');
             return;
         }
-        // Отправка данных на сервер или другие действия
-    };
+
+        const participant = {
+            name,
+            nickname,
+            telegram,
+            experience,
+            isPlayingMoney,
+        };
+
+        try {
+            await axios.post('/api/participants', participant);
+            // Дополнительные действия после успешной отправки данных
+            refreshParticipants();
+        } catch (error) {
+            console.error('Error inserting participant:', error);
+
+
+    }};
 
     return (
         <form onSubmit={handleSubmit}>
