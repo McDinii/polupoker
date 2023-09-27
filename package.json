@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  },
+  "scripts": {
+    "start": "concurrently \"cd polupoker && npm start\" \"cd backendode && node server.js\""
+  }
+}
